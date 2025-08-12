@@ -6,14 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
 public function up()
 {
     Schema::create('festivals', function (Blueprint $table) {
         $table->id();
         $table->string('name');
+        $table->date('date'); // <-- deze toevoegen!
         $table->string('location');
-        $table->date('start_date');
-        $table->date('end_date');
+        $table->decimal('price', 8, 2);
+        $table->integer('max_capacity');
         $table->timestamps();
     });
 }

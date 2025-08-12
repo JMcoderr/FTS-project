@@ -6,14 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-public function up()
+
+    public function up()
 {
-    Schema::create('trips', function (Blueprint $table) {
+    Schema::create('festivals', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('bus_id')->constrained('buses')->onDelete('cascade');
-        $table->foreignId('route_id')->constrained('routes')->onDelete('cascade');
-        $table->dateTime('departure_time');
-        $table->dateTime('arrival_time')->nullable();
+        $table->string('name');
+        $table->date('date');
+        $table->string('location');
+        $table->decimal('price', 8, 2);
+        $table->integer('max_capacity');
         $table->timestamps();
     });
 }
