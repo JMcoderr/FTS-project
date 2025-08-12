@@ -3,6 +3,7 @@
 @extends('layouts.app')
 
 @section('content')
+<a href="{{ route('customers.create') }}">Nieuwe klant toevoegen</a>
 <h1>Klantenlijst</h1>
 <table>
     <thead>
@@ -16,7 +17,7 @@
         @foreach ($customers as $customer)
         <tr>
             <td>{{ $customer->id }}</td>
-            <td>{{ $customer->name }}</td>
+            <td>{{ $customer->first_name }} {{ $customer->last_name }}</td>
             <td>{{ $customer->email }}</td>
         </tr>
         @endforeach

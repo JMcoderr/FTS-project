@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
@@ -64,16 +65,14 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-    $request->validate([
-        'name' => 'required|max:255',
-        'email' => 'required|email|unique:customers,email',
-    ]);
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name'  => 'required|max:255',
+            'email'      => 'required|email|unique:customers,email',
+        ]);
 
-    \App\Models\Customer::create([
-        'name' => $request->name,
-        'email' => $request->email,
-    ]);
+        Customer::create($validated);
 
-    return redirect()->route('customers.index')->with('success', 'Klant toegevoegd!');
+        return redirect()->route('customers.index')->with('success', 'Klant toegevoegd.');
     }
 }

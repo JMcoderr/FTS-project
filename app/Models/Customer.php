@@ -11,7 +11,8 @@ class Customer extends Model
 
     // Vulbare velden, zodat je deze kunt mass assignen
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'phone number',
         'address'
