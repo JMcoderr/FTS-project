@@ -7,50 +7,6 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index()
-    // {
-    //     //
-    // }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    // Removed duplicate store method to fix redeclaration error.
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 
     public function index()
     {
@@ -74,5 +30,38 @@ class CustomerController extends Controller
         Customer::create($validated);
 
         return redirect()->route('customers.index')->with('success', 'Klant toegevoegd.');
+    }
+
+        // Toon formulier om klant te bewerken
+    public function edit($id)
+    {
+        $customer = Customer::findOrFail($id);
+        return view('customers.edit', compact('customer'));
+    }
+
+    // Verwerk de update van klantgegevens
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name'  => 'required|string|max:255',
+            'email'      => 'required|email|unique:customers,email,'.$id,
+        ]);
+
+        $customer = Customer::findOrFail($id);
+        $customer->first_name = $request->first_name;
+        $customer->last_name = $request->last_name;
+        $customer->email = $request->email;
+        $customer->save();
+
+        return redirect()->route('customers.index')->with('success', 'Klant succesvol bijgewerkt.');
+    }
+
+        public function destroy($id)
+    {
+        $customer = Customer::findOrFail($id);
+        $customer->delete();
+
+        return redirect()->route('customers.index')->with('success', 'Klant succesvol verwijderd.');
     }
 }
