@@ -12,4 +12,7 @@ Route::resource('tickets', TicketController::class);
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/', function () {
     return view('welcome');
+Route::get('/customer', function () {
+    return view('customer');
+});
 });

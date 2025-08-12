@@ -15,20 +15,9 @@ class CustomerController extends Controller
     // }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    // Removed duplicate store method to fix redeclaration error.
 
     /**
      * Display the specified resource.
@@ -66,5 +55,25 @@ class CustomerController extends Controller
     {
     $customers = \App\Models\Customer::all();
     return view('customers.index', compact('customers'));
+    }
+
+    public function create()
+    {
+    return view('customers.create');
+    }
+
+    public function store(Request $request)
+    {
+    $request->validate([
+        'name' => 'required|max:255',
+        'email' => 'required|email|unique:customers,email',
+    ]);
+
+    \App\Models\Customer::create([
+        'name' => $request->name,
+        'email' => $request->email,
+    ]);
+
+    return redirect()->route('customers.index')->with('success', 'Klant toegevoegd!');
     }
 }
