@@ -5,19 +5,18 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
+    public function up()
     {
         Schema::create('buses', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
             $table->id();
-            $table->string('name'); // b.v. "Bus A"
-            $table->foreignId('festival_id')->constrained()->cascadeOnDelete(); // koppeling festival
-            $table->integer('capacity')->default(40); // max aantal plaatsen
+            $table->foreignId('festival_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->integer('capacity')->default(35);
             $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('buses');
     }

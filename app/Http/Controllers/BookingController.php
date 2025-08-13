@@ -3,88 +3,84 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use App\Models\Customer;
 use App\Models\Festival;
+use App\Services\BusService;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function index(Request $request)
+    protected $busService;
+
+    public function __construct(BusService $busService)
     {
-        $query = Booking::with(['customer','festival']);
+        $this->busService = $busService;
+    }
 
-        // (optioneel) kleine filter
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $bookings = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+    // Lijst van alle boekingen
+    public function index()
+    {
+        $bookings = Booking::with(['customer', 'festival', 'bus'])->paginate(10);
         return view('bookings.index', compact('bookings'));
     }
 
+    // Maak een nieuwe boeking
     public function create()
     {
-        $customers = Customer::orderBy('first_name')->get();
-        $festivals  = Festival::orderBy('date')->get();
-        return view('bookings.create', compact('customers','festivals'));
+    $festivals = Festival::all();
+    $customers = \App\Models\Customer::all();
+    return view('bookings.create', compact('festivals', 'customers'));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'festival_id' => 'required|exists:festivals,id',
-            'seats'       => 'required|integer|min:1',
-            'status'      => 'required|in:pending,confirmed,cancelled',
         ]);
 
-        // total_price = seats * festival->price
-        $festival = Festival::findOrFail($data['festival_id']);
-        $data['total_price'] = $festival->price * $data['seats'];
+        $booking = Booking::create($request->all());
 
-        // simpele puntenregel: 1 punt per €10 uitgegeven (rond naar beneden)
-        $data['points_awarded'] = (int) floor($data['total_price'] / 10);
+        // Assign a bus to the booking for the selected festival
+        $bus = \App\Models\Bus::where('festival_id', $request->festival_id)->first();
+        if ($bus) {
+            $booking->bus_id = $bus->id;
+            $booking->save();
+        }
 
-        $booking = Booking::create($data);
-
-        return redirect()->route('bookings.index')->with('success', 'Boeking aangemaakt.');
+        return redirect()->route('bookings.index')->with('success', 'Boeking aangemaakt en bus toegewezen!');
     }
 
-    public function show(Booking $booking)
+    // Toon details van een specifieke boeking
+    public function show($id)
     {
-        $booking->load(['customer','festival']);
+        $booking = \App\Models\Booking::with(['customer', 'festival', 'bus'])->findOrFail($id);
         return view('bookings.show', compact('booking'));
     }
 
-    public function edit(Booking $booking)
+    // Bewerk een bestaande boeking
+    public function edit($id)
     {
-        $booking->load(['customer','festival']);
-        $customers = Customer::orderBy('first_name')->get();
-        $festivals  = Festival::orderBy('date')->get();
-        return view('bookings.edit', compact('booking','customers','festivals'));
+        $booking = \App\Models\Booking::with(['customer', 'festival', 'bus'])->findOrFail($id);
+        $festivals = \App\Models\Festival::all();
+        $customers = \App\Models\Customer::all();
+        return view('bookings.edit', compact('booking', 'festivals', 'customers'));
     }
 
-    public function update(Request $request, Booking $booking)
+    // Werk een bestaande boeking bij
+    public function update(Request $request, $id)
     {
-        $data = $request->validate([
+        $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'festival_id' => 'required|exists:festivals,id',
-            'seats'       => 'required|integer|min:1',
-            'status'      => 'required|in:pending,confirmed,cancelled',
         ]);
 
-        $festival = Festival::findOrFail($data['festival_id']);
-        $data['total_price'] = $festival->price * $data['seats'];
-        $data['points_awarded'] = (int) floor($data['total_price'] / 10);
+        $booking = \App\Models\Booking::findOrFail($id);
+        $booking->update($request->all());
 
-        $booking->update($data);
+        // (optioneel) Bus toewijzen na update
+        $festival = \App\Models\Festival::find($request->festival_id);
+        $this->busService::assignBuses($festival);
 
-        return redirect()->route('bookings.index')->with('success', 'Boeking bijgewerkt.');
-    }
-
-    public function destroy(Booking $booking)
-    {
-        $booking->delete();
-        return redirect()->route('bookings.index')->with('success', 'Boeking verwijderd.');
+        return redirect()->route('bookings.index')->with('success', 'Boeking bijgewerkt!');
     }
 }
