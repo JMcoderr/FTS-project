@@ -32,4 +32,9 @@ class Booking extends Model
     {
         return $this->belongsTo(Festival::class);
     }
+
+    public function buses()
+    {
+        return $this->belongsToMany(\App\Models\Bus::class)->withTimestamps();
+    }
 }

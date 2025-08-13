@@ -18,6 +18,12 @@ class Festival extends Model
     ];
 
     public function bookings()
-{
-    return $this->hasMany(\App\Models\Booking::class);
-}}
+    {
+        return $this->hasMany(\App\Models\Booking::class);
+    }
+
+    public function buses()
+    {
+        return $this->hasMany(Bus::class);
+    }
+}
