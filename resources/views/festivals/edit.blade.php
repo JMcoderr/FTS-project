@@ -1,26 +1,30 @@
 @extends('layouts.app')
-
+<link rel="stylesheet" href="{{ asset('css/festivals.css') }}">
 @section('content')
-<h1>Festival Bewerken</h1>
+<body class="festival-bg">
+    <div class="festival-container">
+        <div class="festival-accent"></div>
+        <h1 class="festival-header">Festival Bewerken</h1>
+        <form method="POST" action="{{ route('festivals.update', $festival) }}" class="festival-form">
+            @csrf
+            @method('PUT')
+            <label for="name">Naam:</label>
+            <input type="text" id="name" name="name" value="{{ old('name', $festival->name) }}" required>
 
-<form method="POST" action="{{ route('festivals.update', $festival) }}">
-    @csrf
-    @method('PUT')
-    <label>Naam:</label><br>
-    <input type="text" name="name" value="{{ old('name', $festival->name) }}" required><br><br>
+            <label for="date">Datum:</label>
+            <input type="date" id="date" name="date" value="{{ old('date', $festival->date) }}" required>
 
-    <label>Datum:</label><br>
-    <input type="date" name="date" value="{{ old('date', $festival->date) }}" required><br><br>
+            <label for="location">Locatie:</label>
+            <input type="text" id="location" name="location" value="{{ old('location', $festival->location) }}" required>
 
-    <label>Locatie:</label><br>
-    <input type="text" name="location" value="{{ old('location', $festival->location) }}" required><br><br>
+            <label for="price">Prijs (€):</label>
+            <input type="number" id="price" name="price" value="{{ old('price', $festival->price) }}" step="0.01" required>
 
-    <label>Prijs (€):</label><br>
-    <input type="number" name="price" value="{{ old('price', $festival->price) }}" step="0.01" required><br><br>
+            <label for="max_capacity">Max. Capaciteit:</label>
+            <input type="number" id="max_capacity" name="max_capacity" value="{{ old('max_capacity', $festival->max_capacity) }}" required>
 
-    <label>Max. Capaciteit:</label><br>
-    <input type="number" name="max_capacity" value="{{ old('max_capacity', $festival->max_capacity) }}" required><br><br>
-
-    <button type="submit">Bijwerken</button>
-</form>
+            <button type="submit" class="festival-btn">Bijwerken</button>
+        </form>
+    </div>
+</body>
 @endsection

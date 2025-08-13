@@ -7,31 +7,24 @@ use Illuminate\Http\Request;
 
 class FestivalController extends Controller
 {
-    // Lijst van festivals met search & sort
     public function index(Request $request)
     {
         $query = Festival::query();
 
-        // Search
+        // Search filter
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->input('search');
             $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('location', 'like', "%{$search}%");
+                ->orWhere('location', 'like', "%{$search}%");
         }
 
         // Sort
-        $sort = $request->get('sort', 'id'); // standaard sorteren op id
-        $direction = $request->get('direction', 'asc'); // standaard oplopend
+        $sort = $request->input('sort', 'id'); // standaard sorteren op ID
+        $direction = $request->input('direction', 'asc');
+        $query->orderBy($sort, $direction);
 
-        // Alleen veilige kolommen
-        if (!in_array($sort, ['id','name','date','location','price','max_capacity'])) {
-            $sort = 'id';
-        }
-        if (!in_array($direction, ['asc','desc'])) {
-            $direction = 'asc';
-        }
-
-        $festivals = $query->orderBy($sort, $direction)->get();
+        // Paginate, 10 per pagina
+        $festivals = $query->paginate(10)->withQueryString();
 
         return view('festivals.index', compact('festivals'));
     }

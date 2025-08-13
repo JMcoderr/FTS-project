@@ -14,6 +14,10 @@ Route::resource('festivals', FestivalController::class);
 Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
 Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
 Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+
+Route::get('festivals', [FestivalController::class, 'index'])->name('festivals.index');
+Route::resource('festivals', FestivalController::class)->except(['index']);
+
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/', function () {
     return view('welcome');
