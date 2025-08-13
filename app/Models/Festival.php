@@ -16,4 +16,8 @@ class Festival extends Model
         'price',
         'max_capacity',
     ];
-}
+
+    public function bookings()
+{
+    return $this->hasMany(\App\Models\Booking::class);
+}}

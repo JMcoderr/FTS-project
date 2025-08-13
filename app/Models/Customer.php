@@ -18,5 +18,7 @@ class Customer extends Model
         'address'
     ];
 
-
-}
+    public function bookings()
+{
+    return $this->hasMany(\App\Models\Booking::class);
+}}
