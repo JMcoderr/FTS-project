@@ -7,6 +7,29 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
+    // Toon het puntenoverzicht van een klant
+    public function points($id)
+    {
+        $customer = \App\Models\Customer::findOrFail($id);
+        return view('customers.points', compact('customer'));
+    }
+
+    // Verwerk het inwisselen van punten
+    public function redeemPoints(Request $request, $id)
+    {
+        $customer = \App\Models\Customer::findOrFail($id);
+        $redeemType = $request->input('redeem_type');
+        $requiredPoints = $redeemType === 'vip' ? 100 : 50; // voorbeeld: 100 voor VIP, 50 voor korting
+        if (($customer->loyalty_points ?? 0) >= $requiredPoints) {
+            $customer->loyalty_points -= $requiredPoints;
+            $customer->save();
+            $message = $redeemType === 'vip' ? 'VIP-ticket toegekend!' : 'Korting toegekend!';
+            return redirect()->route('customers.points', $customer->id)->with('success', $message);
+        } else {
+            return redirect()->route('customers.points', $customer->id)->with('error', 'Niet genoeg punten om in te wisselen.');
+        }
+    }
+
 
     public function index()
     {

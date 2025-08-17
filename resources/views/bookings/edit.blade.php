@@ -39,9 +39,8 @@
 
     <label>Status:</label><br>
     <select name="status" required>
-        @foreach(['pending','confirmed','cancelled'] as $st)
-            <option value="{{ $st }}" {{ old('status', $booking->status)==$st?'selected':'' }}>{{ ucfirst($st) }}</option>
-        @endforeach
+        <option value="Bevestigd" {{ old('status', $booking->status)=='Bevestigd'?'selected':'' }}>Bevestigd</option>
+        <option value="Geannuleerd" {{ old('status', $booking->status)=='Geannuleerd'?'selected':'' }}>Geannuleerd</option>
     </select><br><br>
 
     <button type="submit">Bijwerken</button>

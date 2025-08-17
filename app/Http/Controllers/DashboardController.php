@@ -9,7 +9,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $festivals = Festival::with('buses.bookings.customer')->get();
+        $festivals = Festival::with(['buses.bookings' => function($q) {
+            $q->where('status', '!=', 'Geannuleerd');
+        }, 'buses.bookings.customer'])->get();
         $customers = \App\Models\Customer::all();
         $customerBusBookings = [];
         foreach ($customers as $customer) {

@@ -36,14 +36,13 @@
         @endforeach
     </select><br><br>
 
-    <label>Zitplaatsen:</label><br>
+    <label>Tickets:</label><br>
     <input type="number" name="seats" min="1" value="{{ old('seats', 1) }}" required><br><br>
 
     <label>Status:</label><br>
     <select name="status" required>
-        @foreach(['pending','confirmed','cancelled'] as $st)
-            <option value="{{ $st }}" {{ old('status','pending')==$st?'selected':'' }}>{{ ucfirst($st) }}</option>
-        @endforeach
+        <option value="Bevestigd" {{ old('status','Bevestigd')=='Bevestigd'?'selected':'' }}>Bevestigd</option>
+        <option value="Geannuleerd" {{ old('status')=='Geannuleerd'?'selected':'' }}>Geannuleerd</option>
     </select><br><br>
 
     <button type="submit">Opslaan</button>

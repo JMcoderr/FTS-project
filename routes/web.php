@@ -10,6 +10,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BusController;
 
 Route::resource('customers', CustomerController::class);
+Route::get('/customers/{customer}/points', [CustomerController::class, 'points'])->name('customers.points');
+Route::post('/customers/{customer}/redeem', [CustomerController::class, 'redeemPoints'])->name('customers.redeem');
 Route::resource('trips', TripController::class);
 Route::resource('tickets', TicketController::class);
 Route::resource('festivals', FestivalController::class);
