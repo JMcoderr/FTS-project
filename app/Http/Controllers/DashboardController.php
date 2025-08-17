@@ -11,7 +11,14 @@ class DashboardController extends Controller
     {
         $festivals = Festival::with(['buses.bookings' => function($q) {
             $q->where('status', '!=', 'Geannuleerd');
-        }, 'buses.bookings.customer'])->get();
+        }, 'buses.bookings.customer', 'bookings'])->get();
+
+        foreach ($festivals as $festival) {
+            // Boekingen die niet geannuleerd zijn
+            $festival->active_bookings_count = $festival->bookings->where('status', '!=', 'Geannuleerd')->sum('seats');
+            $festival->available_seats = $festival->max_capacity - $festival->active_bookings_count;
+        }
+
         $customers = \App\Models\Customer::all();
         $customerBusBookings = [];
         foreach ($customers as $customer) {

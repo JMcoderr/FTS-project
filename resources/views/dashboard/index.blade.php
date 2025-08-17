@@ -8,8 +8,8 @@
     <h2>{{ $festival->name }} ({{ $festival->date }})</h2>
     <p>Locatie: {{ $festival->location }} | Max Capaciteit: {{ $festival->max_capacity }}</p>
 
-    <p><strong>Aantal boekingen:</strong> {{ $festival->bookings->count() }}</p>
-    <p><strong>Aantal beschikbare plekken:</strong> {{ $festival->max_capacity - $festival->bookings->sum('seats') }}</p>
+    <p><strong>Aantal boekingen:</strong> {{ $festival->active_bookings_count }}</p>
+    <p><strong>Aantal beschikbare plekken:</strong> {{ $festival->available_seats }}</p>
 
     @if($festival->buses->count())
         @foreach($festival->buses as $bus)
