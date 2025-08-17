@@ -26,6 +26,7 @@
                         <div class="customer-btn-group">
                             <a class="customer-btn" href="{{ route('customers.edit', $customer->id) }}">Bewerken</a>
                             <a class="customer-btn" href="{{ route('customers.points', $customer->id) }}">Punten bekijken/inwisselen</a>
+                            <a class="customer-btn" href="{{ route('customers.history', $customer->id) }}">Reisgeschiedenis</a>
                             <form action="{{ route('customers.destroy', $customer->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')

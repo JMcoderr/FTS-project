@@ -7,6 +7,13 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
+    // Toon reisgeschiedenis van een klant
+    public function history($id)
+    {
+        $customer = \App\Models\Customer::findOrFail($id);
+        $festivals = $customer->bookings()->with('festival')->get()->pluck('festival')->unique('id');
+        return view('customers.history', compact('customer', 'festivals'));
+    }
     // Toon het puntenoverzicht van een klant
     public function points($id)
     {
