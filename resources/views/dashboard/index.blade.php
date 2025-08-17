@@ -8,9 +8,11 @@
     <h2>{{ $festival->name }} ({{ $festival->date }})</h2>
     <p>Locatie: {{ $festival->location }} | Max Capaciteit: {{ $festival->max_capacity }}</p>
 
+    <!-- Totaal aantal tickets verwijderd zoals gevraagd -->
+
     @if($festival->buses->count())
         @foreach($festival->buses as $bus)
-            <h3>{{ $bus->name }} ({{ $bus->bookings->count() }}/{{ $bus->capacity }})</h3>
+            <h3>{{ $bus->name }} (Zitplaatsen: {{ $bus->bookings->sum('seats') }}/{{ $bus->capacity }})</h3>
             <ul>
                 @foreach($bus->bookings as $booking)
                     <li>{{ $booking->customer->first_name }} {{ $booking->customer->last_name }} - Punten: {{ $booking->points_awarded }}</li>

@@ -34,7 +34,7 @@
         @endforeach
     </select><br><br>
 
-    <label>Zitplaatsen:</label><br>
+    <label>Tickets:</label><br>
     <input type="number" name="seats" min="1" value="{{ old('seats', $booking->seats) }}" required><br><br>
 
     <label>Status:</label><br>
