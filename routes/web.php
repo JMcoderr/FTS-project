@@ -27,7 +27,7 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Route::get('/welcome', fn() => view('welcome'));
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard', function() {
     if (!Auth::check()) return redirect('/login');
-    return view('auth.dashboard');
+    return view('customer.dashboard');
 });
 
 /*
@@ -243,6 +243,12 @@ Route::get('/customer/dashboard', function() {
 
     $customer = \App\Models\Customer::where('email', $user->email)->first();
     return view('customer.dashboard', compact('customer'));
+});
+
+// Customer reisgeschiedenis
+Route::get('/reisgeschiedenis', function() {
+    if (!Auth::check()) return redirect('/login');
+    return view('customer.reisgeschiedenis');
 });
 
 /*

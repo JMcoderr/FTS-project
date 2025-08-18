@@ -1,4 +1,4 @@
-/* FTS Auth Page Styling */
+/* Customer Dashboard Styling */
 body {
     background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
     font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
@@ -59,7 +59,7 @@ body {
 }
 .hero-content {
     margin: 0 auto;
-    max-width: 400px;
+    max-width: 700px;
     text-align: center;
     z-index: 2;
     animation: fadeIn 1.2s 0.6s cubic-bezier(.77,0,.175,1) both;
@@ -68,7 +68,7 @@ body {
     0% { opacity: 0; }
     100% { opacity: 1; }
 }
-.auth-form {
+.dashboard-card {
     background: #fff;
     border-radius: 24px;
     box-shadow: 0 2px 24px rgba(255,106,136,0.07);
@@ -81,40 +81,23 @@ body {
     position: relative;
     overflow: hidden;
     font-family: 'Poppins', 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    max-width: 480px;
 }
-.auth-form:hover {
+.dashboard-card:hover {
     transform: translateY(-10px) scale(1.04);
     box-shadow: 0 12px 36px rgba(255,106,136,0.18);
 }
-.auth-form h2 {
+.dashboard-card h2 {
     color: #ff6a88;
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 18px;
     letter-spacing: 1px;
 }
-.auth-form label {
-    display: block;
-    margin-bottom: 8px;
-    color: #ff6a88;
-    font-weight: 600;
+.dashboard-card p {
     font-size: 1.08rem;
-    text-align: left;
-}
-.auth-form input {
-    width: 100%;
-    padding: 10px 16px;
-    border-radius: 12px;
-    border: 1px solid #ffcc70;
+    color: #333;
     margin-bottom: 18px;
-    font-size: 1rem;
-    font-family: inherit;
-    box-shadow: 0 2px 8px rgba(255,106,136,0.07);
-    transition: border 0.2s;
-}
-.auth-form input:focus {
-    border: 1.5px solid #ff6a88;
-    outline: none;
 }
 .cta-btn {
     background: #fff;
@@ -150,35 +133,15 @@ body {
 .cta-btn:hover:after {
     opacity: 0.15;
 }
-.cta-btn.login-btn {
-    border: 2px solid #ffcc70;
-    font-weight: bold;
-    background: #fff;
-    color: #ff6a88;
-    min-width: 140px;
-    transition: border 0.2s, background 0.2s, color 0.2s;
-}
-.cta-btn.login-btn:hover {
-    background: #ffcc70;
-    color: #fff;
-    border: 2px solid #ff6a88;
-    box-shadow: 0 4px 16px rgba(255,106,136,0.18);
-}
-.cta-btn.home-btn {
-    background: #ffcc70;
-    color: #fff;
-    min-width: 140px;
-    font-weight: bold;
-    border: 2px solid #ffcc70;
-    transition: border 0.2s, background 0.2s, color 0.2s;
-}
-.cta-btn.home-btn:hover {
-    background: #fff;
-    color: #ff6a88;
-    border: 2px solid #ff6a88;
-    box-shadow: 0 4px 16px rgba(255,106,136,0.18);
-}
+
 @keyframes fadeInUp {
     0% { opacity: 0; transform: translateY(40px); }
     100% { opacity: 1; transform: translateY(0); }
+}
+
+.logout-btn:hover {
+    background: #ffcc70 !important;
+    color: #fff !important;
+    border: 2px solid #ff6a88 !important;
+    box-shadow: 0 4px 16px rgba(255,106,136,0.18);
 }
