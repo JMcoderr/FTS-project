@@ -15,8 +15,8 @@
             <h2><span style="font-size:1.5rem;">🗂️</span> Festival Overzicht</h2>
             <p>Bekijk je boekingen, loyaliteitspunten en aankomende festivals.<br>Alles wat je nodig hebt voor jouw festivalreis vind je hier!</p>
             <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:18px;">
-                <a href="/bookings" class="cta-btn" style="min-width:140px;">Mijn Boekingen</a>
-                <a href="/festivals" class="cta-btn" style="min-width:140px;">Festivals</a>
+                <a href="/customers/bookings" class="cta-btn" style="min-width:140px;">Mijn boekingen</a>
+                <a href="{{ route('customer.festivals') }}" class="cta-btn" style="min-width:140px;">Festivals</a>
                 <a href="/profile" class="cta-btn" style="min-width:140px;">Profiel</a>
                 <a href="/reisgeschiedenis" class="cta-btn" style="min-width:140px;">Reisgeschiedenis</a>
             </div>
@@ -28,5 +28,4 @@
         <div style="margin-top:32px;font-size:0.95rem;color:#ffcc70;opacity:0.8;">© 2025 Festival Travel System</div>
     </div>
 </div>
-<!-- All dashboard/profile CSS moved to customer.css -->
 @endsection

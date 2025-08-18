@@ -50,7 +50,7 @@ Route::get('/dashboard', function() {
 */
 Route::get('/customer-list', function() {
     $customers = \App\Models\Customer::all();
-    return view('customer_list.index', compact('customers'));
+    return view('customer_list.admin_customers', compact('customers'));
 })->name('customers.index');
 
 
@@ -65,7 +65,12 @@ Route::post('/customer-list', function(Request $request) {
         'password' => 'required|min:6',
     ]);
     // Maak klant aan
-    $customer = \App\Models\Customer::create($request->only(['first_name', 'last_name', 'email', 'phone']));
+    $customer = \App\Models\Customer::create([
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+    ]);
     // Maak user aan zodat klant kan inloggen
     \App\Models\User::create([
         'name' => $request->first_name . ' ' . $request->last_name,
@@ -73,7 +78,7 @@ Route::post('/customer-list', function(Request $request) {
         'password' => \Illuminate\Support\Facades\Hash::make($request->password),
         'role' => 'customer',
     ]);
-    return redirect()->route('customers.index')->with('success', 'Klant succesvol aangemaakt!');
+    return redirect('/admin/customers')->with('success', 'Klant succesvol aangemaakt!');
 })->name('customers.store');
 
 
@@ -123,8 +128,10 @@ Route::get('/customer-list/customer', fn() => view('customer_list.customer'));
 
 Route::delete('/customer-list/{id}', function($id) {
     $customer = \App\Models\Customer::findOrFail($id);
+    // Verwijder gekoppelde user
+    \App\Models\User::where('email', $customer->email)->delete();
     $customer->delete();
-    return redirect()->route('customers.index')->with('success', 'Klant verwijderd!');
+    return redirect()->route('customers.index')->with('success', 'Klant en gekoppelde gebruiker verwijderd!');
 })->name('customers.destroy');
 
 /*
@@ -132,6 +139,13 @@ Route::delete('/customer-list/{id}', function($id) {
 | Customer routes (ingelogde gebruikers)
 |--------------------------------------------------------------------------
 */
+Route::get('/customers/tickets', function() {
+    if (!Auth::check()) return redirect('/login');
+    $user = Auth::user();
+    $customer = \App\Models\Customer::where('email', $user->email)->first();
+    $bookings = $customer ? $customer->bookings()->with(['festival', 'bus'])->get() : collect();
+    return view('customer.tickets', compact('bookings'));
+});
 Route::get('/profile', fn() => view('customer.profile'));
 
 Route::post('/profile/update', function(Request $request) {
@@ -224,7 +238,7 @@ Route::post('/customers/bookings', function(Request $request) {
         'bus_id' => $bus?->id,
         'seats' => $request->seats,
         'seat_type' => $seat_type,
-        'status' => 'pending',
+    'status' => 'bevestigd',
         'total_price' => $price,
         'booked_at' => now(),
         'points_awarded' => $awarded,
@@ -248,7 +262,31 @@ Route::get('/customer/dashboard', function() {
 // Customer reisgeschiedenis
 Route::get('/reisgeschiedenis', function() {
     if (!Auth::check()) return redirect('/login');
-    return view('customer.reisgeschiedenis');
+    $user = Auth::user();
+    $customer = \App\Models\Customer::where('email', $user->email)->first();
+    $bookings = $customer ? $customer->bookings()->with(['festival', 'bus'])->orderByDesc('booked_at')->get() : collect();
+    return view('customer.reisgeschiedenis', compact('bookings'));
+});
+
+// Customer: eigen boekingen overzicht
+Route::get('/customers/bookings', function() {
+    if (!Auth::check()) return redirect('/login');
+    $user = Auth::user();
+    $customer = \App\Models\Customer::where('email', $user->email)->first();
+    $bookings = $customer ? $customer->bookings()->with(['festival', 'bus'])->get() : collect();
+    return view('customer.customer_bookings', compact('bookings'));
+});
+
+// Annuleer klantboeking en trek loyalty punten af
+Route::post('/customers/bookings/{id}/cancel', function($id) {
+    $booking = \App\Models\Booking::findOrFail($id);
+    $customer = \App\Models\Customer::find($booking->customer_id);
+    if ($customer && $booking->points_awarded > 0) {
+        $customer->loyalty_points -= $booking->points_awarded;
+        $customer->save();
+    }
+    $booking->delete();
+    return redirect('/customers/bookings')->with('success', 'Boeking geannuleerd en punten verwijderd.');
 });
 
 /*
@@ -269,3 +307,91 @@ Route::get('/support', function () {
 Route::get('/contact', function () {
     return view('support');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Admin routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/admin/dashboard', function() {
+    return view('customer_list.admin_dashboard');
+})->name('admin.dashboard');
+Route::get('/admin/customers/create', function() {
+    return view('customer_list.admin_create_customer');
+})->name('admin.customers.create');
+Route::get('/admin/festivals/create', function() {
+    return view('customer_list.admin_create_festival');
+})->name('admin.festivals.create');
+Route::get('/admin/buses/create', function() {
+    return view('customer_list.admin_create_bus');
+})->name('admin.buses.create');
+Route::get('/admin/bookings', function() {
+    $bookings = \App\Models\Booking::with(['customer', 'festival', 'bus'])->orderByDesc('created_at')->get();
+    return view('customer_list.admin_bookings', compact('bookings'));
+})->name('admin.bookings');
+
+Route::get('/admin/customers', function() {
+    $customers = \App\Models\Customer::all();
+    return view('customer_list.admin_customers', compact('customers'));
+})->name('admin.customers');
+
+Route::post('/admin/customers/store', function(Request $request) {
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:customers,email|unique:users,email',
+        'password' => 'required|min:6',
+    ]);
+    // Maak klant aan
+    $customer = \App\Models\Customer::create([
+        'first_name' => $request->name,
+        'last_name' => $request->last_name,
+        'email' => $request->email,
+    ]);
+    // Maak user aan zodat klant kan inloggen
+    \App\Models\User::create([
+        'name' => $request->name . ' ' . $request->last_name,
+        'email' => $request->email,
+        'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+        'role' => 'customer',
+    ]);
+    return redirect('/admin/customers')->with('success', 'Klant succesvol aangemaakt!');
+});
+
+
+Route::post('/admin/festivals/store', function(Request $request) {
+    $request->validate([
+        'name' => 'required',
+        'location' => 'required',
+        'date' => 'required|date',
+        'price' => 'required|numeric',
+        'max_capacity' => 'required|integer|min:1',
+        'description' => 'nullable|string',
+    ]);
+    \App\Models\Festival::create([
+        'name' => $request->name,
+        'location' => $request->location,
+        'date' => $request->date,
+        'price' => $request->price,
+        'max_capacity' => $request->max_capacity,
+        'description' => $request->description,
+    ]);
+    return redirect('/admin/festivals/create')->with('success', 'Festival succesvol aangemaakt!');
+});
+
+Route::post('/admin/buses/store', function(Request $request) {
+    $request->validate([
+        'name' => 'required',
+        'capacity' => 'required|integer|min:1',
+        'festival_id' => 'required|exists:festivals,id',
+    ]);
+    \App\Models\Bus::create([
+        'name' => $request->name,
+        'capacity' => $request->capacity,
+        'festival_id' => $request->festival_id,
+    ]);
+    return redirect('/admin/buses/create')->with('success', 'Bus succesvol aangemaakt!');
+});
+
+Route::get('/admin', function() {
+    return view('customer_list.admin_dashboard');
+})->name('admin.dashboard');

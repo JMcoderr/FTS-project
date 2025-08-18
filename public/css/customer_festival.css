@@ -1,0 +1,252 @@
+/* customer_festival.css - Styling for customer festival list page */
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
+    overflow-x: hidden;
+}
+body.modal-open {
+    overflow: hidden;
+}
+.hero-section {
+    text-align: center;
+    margin-top: 40px;
+    color: #fff;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+/* --- FTS Logo Animated Circle --- */
+.logo-bubble {
+    position: absolute;
+    right: 40px;
+    top: 80px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(255,106,136,0.12);
+    border: 8px solid #ff6a88;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    animation: floatLogo 3s ease-in-out infinite;
+}
+.logo-bubble img {
+    width: 120px;
+    height: 120px;
+    display: block;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 16px rgba(255,106,136,0.12);
+}
+@keyframes floatLogo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+}
+.festival-list-container {
+    max-width: 1000px;
+    margin: 80px auto 0 auto;
+    background: rgba(255,255,255,0.92);
+    border-radius: 36px;
+    box-shadow: 0 12px 48px rgba(255,106,136,0.15);
+    padding: 48px 48px 70px 48px;
+    position: relative;
+}
+.festival-list-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #ff6a88;
+    margin-bottom: 28px;
+    text-align: center;
+    letter-spacing: 2px;
+    animation: fadeInDown 1.2s cubic-bezier(.77,0,.175,1);
+}
+@keyframes fadeInDown {
+    0% { opacity: 0; transform: translateY(-40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.festival-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 36px;
+    margin-top: 30px;
+}
+.festival-card {
+    background: linear-gradient(120deg, #fff 70%, #ffcc70 100%);
+    border-radius: 22px;
+    box-shadow: 0 4px 24px rgba(255,106,136,0.10);
+    padding: 32px 28px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: box-shadow 0.3s, transform 0.3s;
+    position: relative;
+    cursor: pointer;
+    animation: fadeIn 1.2s cubic-bezier(.77,0,.175,1);
+}
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.festival-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+.festival-modal.active ~ .festival-card {
+    pointer-events: none;
+}
+.festival-card:hover {
+    box-shadow: 0 8px 32px rgba(255,126,148,0.18);
+    transform: translateY(-6px) scale(1.03);
+}
+.festival-name {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ff6a88;
+    margin-bottom: 8px;
+}
+.festival-date {
+    font-size: 1.08rem;
+    color: #ffcc70;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+.festival-location {
+    font-size: 1.05rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+.festival-price {
+    font-size: 1.05rem;
+    color: #ff6a88;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+.festival-capacity {
+    font-size: 1.01rem;
+    color: #ffcc70;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.festival-bus {
+    font-size: 1.01rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+.details-btn {
+    background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 12px 32px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    margin: 18px auto 0 auto;
+    box-shadow: 0 2px 12px rgba(255,126,148,0.10);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, color 0.2s;
+    outline: none;
+    letter-spacing: 1px;
+    display: block;
+}
+.details-btn:hover {
+    background: linear-gradient(90deg, #ffcc70 0%, #ff6a88 100%);
+    color: #ff6a88;
+    transform: scale(1.07);
+}
+.festival-list-footer {
+    margin-top: 38px;
+    text-align: center;
+}
+.festival-list-copyright {
+    margin-top: 32px;
+    font-size: 0.95rem;
+    color: #ffb47e;
+    opacity: 0.8;
+    text-align: center;
+}
+.festival-modal-title {
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: #ff6a88;
+    margin-bottom: 18px;
+    text-align: center;
+    letter-spacing: 2px;
+    animation: fadeInDown 1.2s cubic-bezier(.77,0,.175,1);
+}
+.festival-modal-description {
+    font-size: 1.12rem;
+    color: #444;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    background: #fff8e0;
+    border-radius: 12px;
+    padding: 16px 14px;
+    box-shadow: 0 2px 12px rgba(255,106,136,0.09);
+    font-style: italic;
+    animation: fadeIn 1.2s cubic-bezier(.77,0,.175,1);
+}
+.festival-modal-actions {
+    display: flex;
+    gap: 18px;
+    justify-content: flex-start;
+    margin-top: 10px;
+    animation: fadeIn 1.2s cubic-bezier(.77,0,.175,1);
+}
+.festival-details {
+    width: 100%;
+    margin-top: 18px;
+    background: linear-gradient(120deg, #fff 60%, #ffcc70 100%);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(255,106,136,0.10);
+    padding: 28px 24px 18px 24px;
+    animation: fadeIn 0.5s cubic-bezier(.77,0,.175,1);
+}
+.festival-details-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+.book-btn {
+    background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-size: 1.08rem;
+    font-weight: 700;
+    box-shadow: 0 2px 12px rgba(255,126,148,0.10);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s, color 0.2s;
+    outline: none;
+    letter-spacing: 1px;
+    display: block;
+}
+.book-btn:hover {
+    background: linear-gradient(90deg, #ffcc70 0%, #ff6a88 100%);
+    color: #ff6a88;
+    transform: scale(1.07);
+}
+@media (max-width: 600px) {
+    .festival-list-container {
+        padding: 18px 6px 30px 6px;
+    }
+    .festival-modal-content {
+        padding: 18px 8px 18px 8px;
+        max-width: 98vw;
+    }
+    .logo-bubble {
+        right: 10px;
+        top: 10px;
+        width: 80px;
+        height: 80px;
+    }
+    .logo-bubble img {
+        width: 54px;
+        height: 54px;
+    }
+}

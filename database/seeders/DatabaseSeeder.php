@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
     // Zorg dat admin account altijd bestaat en niet opnieuw wordt aangemaakt
-    $this->call(\Database\Seeders\AdminUserSeeder::class);
+    $this->call([\Database\Seeders\AdminUserSeeder::class, \Database\Seeders\FestivalSeeder::class, \Database\Seeders\BusSeeder::class]);
     }
 }

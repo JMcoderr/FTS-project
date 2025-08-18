@@ -29,6 +29,9 @@ class AuthController extends Controller
             return back()->withErrors(['password' => 'Wachtwoord klopt niet']);
         }
     Auth::login($user);
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
     return redirect('/dashboard');
     }
 
