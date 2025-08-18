@@ -4,10 +4,11 @@
 <head>
     <title>FTS Project</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @if(request()->path() == '' || request()->path() == '/')
+        <link rel="stylesheet" href="/css/welcome.css">
+    @endif
 </head>
 <body>
-    <div class="container">
-        @yield('content')
-    </div>
+    @yield('content')
 </body>
 </html>

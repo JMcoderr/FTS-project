@@ -34,7 +34,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 | Home & Dashboard routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', fn() => view('welcome'));
 Route::get('/welcome', fn() => view('welcome'));
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -153,6 +153,11 @@ Route::get('/festival-list', function() {
     return view('customer.festivals_list', compact('festivals'));
 });
 
+Route::get('/customers/festivals', function() {
+    $festivals = \App\Models\Festival::all();
+    return view('customer.festivals_list', compact('festivals'));
+})->name('customer.festivals');
+
 Route::get('/customers/festivals/{id}', function($id) {
     $festival = Festival::findOrFail($id);
     return view('customer.festival_detail', compact('festival'));
@@ -250,3 +255,5 @@ Route::resource('tickets', TicketController::class);
 Route::resource('festivals', FestivalController::class);
 Route::resource('bookings', BookingController::class);
 Route::resource('buses', BusController::class);
+
+Route::get('/about', fn() => view('about'));

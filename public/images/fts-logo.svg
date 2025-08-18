@@ -1,0 +1,17 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<radialGradient id="bubbleGradient" cx="50%" cy="50%" r="50%">
+			<stop offset="0%" stop-color="#fff"/>
+			<stop offset="100%" stop-color="#ffcc70"/>
+		</radialGradient>
+		<linearGradient id="textGradient" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#ff6a88"/>
+			<stop offset="1" stop-color="#ffcc70"/>
+		</linearGradient>
+	</defs>
+	<circle cx="60" cy="60" r="54" fill="url(#bubbleGradient)" stroke="#ff6a88" stroke-width="6"/>
+	<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat, Arial, sans-serif" font-size="38" font-weight="bold" fill="url(#textGradient)" letter-spacing="4">FTS</text>
+	<path d="M35 85 Q60 105 85 85" stroke="#ff6a88" stroke-width="3" fill="none"/>
+	<circle cx="38" cy="84" r="3.5" fill="#ffcc70"/>
+	<circle cx="82" cy="84" r="3.5" fill="#ffcc70"/>
+</svg>

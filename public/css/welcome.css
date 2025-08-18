@@ -1,0 +1,372 @@
+body {
+    background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.hero-section {
+    background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
+    padding: 0;
+    margin-bottom: 0;
+    position: relative;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+.hero-title {
+    color: #fff;
+    font-size: 3.2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 12px rgba(255,106,136,0.18);
+    animation: fadeInDown 1.2s cubic-bezier(.77,0,.175,1);
+}
+@keyframes fadeInDown {
+    0% { opacity: 0; transform: translateY(-40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.hero-nav {
+    margin-bottom: 30px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    animation: fadeInUp 1.2s 0.3s cubic-bezier(.77,0,.175,1) both;
+}
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.hero-nav a {
+    color: #fff;
+    margin: 0 18px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(255,106,136,0.08);
+}
+.hero-nav a:hover {
+    background: #fff;
+    color: #ff6a88;
+    box-shadow: 0 4px 16px rgba(255,106,136,0.18);
+}
+.hero-content {
+    margin: 0 auto;
+    max-width: 700px;
+    text-align: center;
+    z-index: 2;
+    animation: fadeIn 1.2s 0.6s cubic-bezier(.77,0,.175,1) both;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+.hero-content h2 {
+    color: #fff;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 8px rgba(255,106,136,0.10);
+}
+.hero-content p {
+    color: #fff;
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+.cta-btn {
+    background: #fff;
+    color: #ff6a88;
+    font-weight: bold;
+    padding: 12px 32px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    display: inline-block;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+}
+.cta-btn:after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, #ffcc70 0%, #ff6a88 100%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: -1;
+}
+.cta-btn:hover {
+    background: #ffcc70;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,106,136,0.18);
+}
+.cta-btn:hover:after {
+    opacity: 0.15;
+}
+.hero-img {
+    width: 340px;
+    height: 340px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    border: 8px solid #fff;
+    position: absolute;
+    right: 40px;
+    top: 80px;
+    z-index: 3;
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+}
+.why-section {
+    background: linear-gradient(90deg, #ffcc70 0%, #fff 100%);
+    padding: 48px 0 32px 0;
+    text-align: center;
+    border-radius: 0 0 32px 32px;
+    box-shadow: 0 2px 24px rgba(255,106,136,0.07);
+}
+.why-section h3 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #ff6a88;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+}
+.why-section p {
+    font-size: 1.18rem;
+    color: #333;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+}
+.why-benefits {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+/* --- Why Benefit Blocks: Exact Match to Provided Image --- */
+/* --- Why Benefit Blocks: Unified Size for Home & About --- */
+/* --- Why Benefit Blocks: Match About Page Style --- */
+.why-benefit {
+    background: linear-gradient(135deg, #ffcc70 60%, #fff 100%);
+    border-radius: 22px;
+    padding: 32px 38px;
+    min-width: 260px;
+    max-width: 340px;
+    box-shadow: 0 6px 24px rgba(255,106,136,0.10);
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.22s, box-shadow 0.22s;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Poppins', 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+.why-benefit.alt {
+    background: linear-gradient(135deg, #ff6a88 60%, #ffcc70 100%);
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(255,106,136,0.18);
+}
+.why-benefit.border {
+    background: linear-gradient(135deg, #fff 40%, #ffcc70 80%, #ff6a88 100%);
+    border: 2px solid #ffcc70;
+    color: #ff6a88;
+}
+.why-benefit.border h4 {
+    color: #ff6a88;
+}
+.why-benefit.border p {
+    color: #ff6a88;
+}
+.why-benefit h4 {
+    font-size: 1.45rem;
+    font-weight: 900;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+    font-family: 'Poppins', 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    text-shadow: 0 2px 8px rgba(255,106,136,0.10);
+}
+.why-benefit p {
+    font-size: 1.12rem;
+    margin: 0 0 12px 0;
+    line-height: 1.7;
+    font-family: 'Poppins', 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+.why-section .festival-tagline {
+    font-size: 1.18rem;
+    color: #ff6a88;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 32px;
+    display: inline-block;
+    background: #fff6f6;
+    border-radius: 18px;
+    padding: 8px 24px;
+    box-shadow: 0 2px 8px rgba(255,106,136,0.07);
+}
+/* --- FTS Logo Animated Circle --- */
+.hero-logo-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(255,106,136,0.12);
+    border: 8px solid #ff6a88;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hero-logo-animated {
+    position: absolute;
+    left: 40px;
+    top: 60px;
+    z-index: 3;
+    animation: floatLogo 3s ease-in-out infinite;
+}
+.fts-logo {
+    width: 120px;
+    height: 120px;
+    display: block;
+}
+@keyframes floatLogo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+}
+
+/* --- Floating Icons --- */
+.floating-icons {
+    position: absolute;
+    left: 16px;
+    top: 60px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    background: linear-gradient(90deg, #ff6a88 0%, #ffcc70 100%);
+    padding: 0;
+    margin-bottom: 0;
+    position: relative;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* --- Why Section --- */
+.why-section {
+    background: linear-gradient(90deg, #ffcc70 0%, #fff 100%);
+    padding: 48px 0 32px 0;
+    text-align: center;
+    border-radius: 0 0 32px 32px;
+    box-shadow: 0 2px 24px rgba(255,106,136,0.07);
+}
+.floating-logo-bubble {
+    position: absolute;
+    right: 40px;
+    top: 60px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle at 50% 50%, #ffe7b3 0%, #fff 70%);
+    border-radius: 50%;
+    box-shadow: 0 4px 24px rgba(255,106,136,0.12), 0 0 0 12px #fff inset;
+    border: 8px solid #ff6a88;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: floatLogo 3s ease-in-out infinite;
+    z-index: 10;
+}
+.fts-logo-better-large {
+    width: 150px;
+    height: 150px;
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0 2px 16px rgba(255,106,136,0.12);
+    background: transparent;
+    margin: 0 auto;
+}
+@keyframes floatLogo {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-18px); }
+}
+@media (max-width: 900px) {
+    .hero-img {
+        position: static;
+        margin: 32px auto 0 auto;
+        display: block;
+    }
+    .why-benefits {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 5px;
+}
+.hero-buttons .cta-btn {
+    font-size: 1.08rem;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    margin-top: -12px;
+}
+
+.floating-icons .icon {
+    font-size: 2.2rem;
+    animation: floatIcon 2.5s infinite ease-in-out;
+    margin-bottom: 8px;
+}
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+.hero-title, .hero-content, .why-section, .why-benefit, .festival-tagline {
+    font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+.hero-subtitle {
+    font-size: 1.35rem;
+    color: #ff6a88;
+    font-family: 'Poppins', 'Montserrat', 'Segoe UI', Arial, sans-serif;
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(255,106,136,0.10);
+}
+
+@media (max-width: 900px) {
+    .hero-img {
+        position: static;
+        margin: 32px auto 0 auto;
+        display: block;
+    }
+    .why-benefits {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
