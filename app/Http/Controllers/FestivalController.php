@@ -46,9 +46,16 @@ class FestivalController extends Controller
             'max_capacity' => 'required|integer|min:1',
         ]);
 
-        Festival::create($request->all());
+        $festival = Festival::create($request->all());
 
-        return redirect()->route('festivals.index')->with('success', 'Festival toegevoegd.');
+        // Automatisch een bus genereren voor dit festival
+        \App\Models\Bus::create([
+            'festival_id' => $festival->id,
+            'name' => $festival->name . ' Bus',
+            'capacity' => $festival->max_capacity,
+        ]);
+
+        return redirect()->route('festivals.index')->with('success', 'Festival en bus toegevoegd.');
     }
 
     // Eén festival bekijken

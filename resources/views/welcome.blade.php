@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Festival Travel System</title>
-</head>
-<body>
-    <h1>Welkom bij Festival Travel System</h1>
-    <p>Dit is de startpagina van jouw project.</p>
-</body>
-</html>
+@extends('layouts.app')
+
+@section('content')
+<h1>Welkom bij Festival Travel System</h1>
+<p>Kies een optie:</p>
+<a href="/login"><button>Login</button></a>
+<a href="/register"><button>Registreren</button></a>
+@endsection
