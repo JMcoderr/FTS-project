@@ -3,7 +3,7 @@
 <h2>Mijn tickets</h2>
 @if(session('success'))
     <div style="color: green; margin-bottom: 15px;">{{ session('success') }}</div>
-    <a href="/customers/festivals" style="display:inline-block; margin-bottom:20px; background:#007bff; color:white; padding:8px 16px; border-radius:4px; text-decoration:none;">Terug naar festivals</a>
+    <a href="/dashboard">Terug naar admin dashboard</a>
 @endif
 @if($bookings->isEmpty())
     <p>Je hebt nog geen tickets geboekt.</p>
@@ -18,7 +18,9 @@
                 <th>Stoelnummer(s)</th>
                 <th>Stoeltype</th>
                 <th>Aantal</th>
-                <th>Status</th>
+                <th>
+                    <a href="?sort=status" style="text-decoration:none;color:inherit;">Status</a>
+                </th>
                 <th>Prijs</th>
                 <th>Korting</th>
                 <th>Loyalty punten</th>
@@ -32,20 +34,41 @@
                     <td>{{ $booking->festival->name ?? '-' }}</td>
                     <td>{{ $booking->festival->date ?? '-' }}</td>
                     <td>{{ $booking->festival->location ?? '-' }}</td>
-                    <td>{{ $booking->bus->name ?? '-' }} (Bus #{{ $booking->bus_id }})</td>
                     <td>
-                        @php
-                            // Simuleer random en naast elkaar stoelen
-                            $bus_capacity = $booking->bus->capacity ?? 50;
-                            $start = rand(1, max(1, $bus_capacity - $booking->seats + 1));
-                        @endphp
-                        @for($i = $start; $i < $start + $booking->seats; $i++)
-                            {{ $i }}@if($i < $start + $booking->seats - 1), @endif
-                        @endfor
+                        @if($booking->bus)
+                            @php
+                                preg_match('/Bus #(\d+)/', $booking->bus->name, $matches);
+                                $busNumber = $matches[1] ?? '';
+                            @endphp
+                            Bus #{{ $busNumber }}
+                        @else
+                            -
+                        @endif
                     </td>
-                    <td>{{ $booking->seat_type ?? '-' }}</td>
+                    <td>
+                        @if($booking->seat_numbers)
+                            {{ $booking->seat_numbers }}
+                        @else
+                            -
+                        @endif
+                    </td>
+                    <td>
+                        @if($booking->seat_type)
+                            {{ ucfirst($booking->seat_type) }}
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td>{{ $booking->seats }}</td>
-                    <td>{{ $booking->status }}</td>
+                    <td>
+                        @if($booking->status === 'bevestigd' || $booking->status === 'Bevestigd')
+                            Bevestigd
+                        @elseif($booking->status === 'cancelled' || $booking->status === 'Geannuleerd')
+                            Geannuleerd
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td>€{{ $booking->total_price }}</td>
                     <td>
                         @if($booking->points_awarded == 0 && $booking->total_price < ($booking->seats * ($booking->festival->price ?? 0)))

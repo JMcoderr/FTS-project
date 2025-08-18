@@ -26,7 +26,9 @@
             <th>ID</th>
             <th>Klant</th>
             <th>Festival</th>
-            <th>Zitplaatsen</th>
+            <th>Stoeltype</th>
+            <th>Stoelnummers</th>
+            <th>Bus</th>
             <th>Status</th>
             <th>Totaal (€)</th>
             <th>Punten</th>
@@ -40,11 +42,19 @@
             <td>{{ $b->id }}</td>
             <td>{{ $b->customer?->first_name }} {{ $b->customer?->last_name }}</td>
             <td>{{ $b->festival?->name }}</td>
-            <td>{{ $b->seats }}</td>
-            <td>{{ $b->status }}</td>
+            <td>{{ ucfirst($b->seat_type) ?? '-' }}</td>
+            <td>{{ $b->seat_numbers ?? '-' }}</td>
+            <td>
+                @if($b->bus)
+                    Bus {{ $b->bus->id }}
+                @else
+                    -
+                @endif
+            </td>
+            <td>{{ ucfirst($b->status) }}</td>
             <td>{{ number_format($b->total_price, 2) }}</td>
             <td>{{ $b->points_awarded }}</td>
-            <td>{{ $b->created_at->format('Y-m-d H:i') }}</td>
+            <td>{{ $b->created_at ? $b->created_at->format('Y-m-d H:i') : '-' }}</td>
             <td>
                 <a href="{{ route('bookings.show', $b) }}">Bekijk</a> |
                 <a href="{{ route('bookings.edit', $b) }}">Bewerken</a> |
@@ -55,7 +65,7 @@
             </td>
         </tr>
         @empty
-        <tr><td colspan="9">Geen boekingen gevonden.</td></tr>
+        <tr><td colspan="11">Geen boekingen gevonden.</td></tr>
         @endforelse
     </tbody>
 </table>

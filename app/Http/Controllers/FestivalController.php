@@ -48,11 +48,13 @@ class FestivalController extends Controller
 
         $festival = Festival::create($request->all());
 
-        // Automatisch een bus genereren voor dit festival
+        // Automatisch een bus genereren voor dit festival met random capaciteit tussen 50 en 150
+        $possibleSizes = range(50, 150, 25);
+        $busCapacity = $possibleSizes[array_rand($possibleSizes)];
         \App\Models\Bus::create([
             'festival_id' => $festival->id,
             'name' => $festival->name . ' Bus',
-            'capacity' => $festival->max_capacity,
+            'capacity' => $busCapacity,
         ]);
 
         return redirect()->route('festivals.index')->with('success', 'Festival en bus toegevoegd.');

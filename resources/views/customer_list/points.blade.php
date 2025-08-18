@@ -13,11 +13,8 @@
 
 <form method="POST" action="{{ route('customers.redeem', $customer->id) }}">
     @csrf
-    <label for="redeem_type">Kies een beloning:</label>
-    <select name="redeem_type" id="redeem_type">
-        <option value="discount">Korting (50 punten)</option>
-        <option value="vip">VIP-ticket (100 punten)</option>
-    </select>
-    <button type="submit">Inwisselen</button>
+    <label for="points">Voeg punten toe:</label>
+    <input type="number" name="points" id="points" min="1" required>
+    <button type="submit">Punten toevoegen</button>
 </form>
 @endsection

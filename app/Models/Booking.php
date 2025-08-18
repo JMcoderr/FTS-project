@@ -12,11 +12,14 @@ class Booking extends Model
     protected $fillable = [
         'customer_id',
         'festival_id',
+        'bus_id',
         'seats',
         'status',
         'total_price',
         'booked_at',
         'points_awarded',
+        'seat_numbers',
+        'seat_type',
     ];
 
     protected $casts = [

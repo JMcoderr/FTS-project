@@ -10,17 +10,15 @@ class AdminUserSeeder extends Seeder
 {
     public function run()
     {
-        $exists = DB::table('users')->where('email', 'admin@admin.com')->exists();
+        $exists = \App\Models\User::where('email', 'admin@admin.com')->exists();
         if (!$exists) {
-            DB::table('users')->insert([
+            \App\Models\User::create([
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'email_verified_at' => Carbon::now(),
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
                 'remember_token' => 'admin_token',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
             ]);
         }
     }

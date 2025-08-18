@@ -52,47 +52,74 @@ class BookingController extends Controller
         $total_price = $seats * ($festival->price ?? 0);
         $points_awarded = (int)($total_price / 10); // 1 punt per €10
 
-        $booking = Booking::create([
-            'customer_id' => $request->customer_id,
-            'festival_id' => $request->festival_id,
-            'seats' => $seats,
-            'total_price' => $total_price,
-            'points_awarded' => $points_awarded,
-            'status' => 'Bevestigd',
-            'booked_at' => now(),
-        ]);
-
-        // Bus assignment logic
+        // Genereer vaste stoelnummers
+        $seatNumbers = [];
         $festivalBuses = \App\Models\Bus::where('festival_id', $festival->id)->orderBy('id')->get();
         $seatsToAssign = $seats;
+        $busNumber = $festivalBuses->count() + 1;
         $bus = null;
         while ($seatsToAssign > 0) {
-            if ($festivalBuses->isEmpty()) {
-                // Create first bus with random capacity between 50 and 150 (intervals of 25)
+            $bus = $festivalBuses->last();
+            $busCapacity = $bus ? $bus->capacity : null;
+            $bookedSeats = $bus ? \App\Models\Booking::where('bus_id', $bus->id)->where('status', 'Bevestigd')->sum('seats') : 0;
+            $freeSeats = $bus ? ($busCapacity - $bookedSeats) : 0;
+            if (!$bus || $freeSeats <= 0) {
                 $possibleSizes = range(50, 150, 25);
                 $busCapacity = $possibleSizes[array_rand($possibleSizes)];
+                // Genereer uniek busnummer tussen 1-50
+                $usedNumbers = $festivalBuses->map(function($b) {
+                    preg_match('/Bus #(\d+)/', $b->name, $matches);
+                    return isset($matches[1]) ? intval($matches[1]) : null;
+                })->filter()->toArray();
+                $availableNumbers = array_diff(range(1, 50), $usedNumbers);
+                $randomBusNumber = $availableNumbers ? $availableNumbers[array_rand($availableNumbers)] : ($busNumber);
                 $bus = \App\Models\Bus::create([
                     'festival_id' => $festival->id,
-                    'name' => $festival->name . ' Bus #1',
+                    'name' => $festival->name . ' Bus #' . $randomBusNumber,
                     'capacity' => $busCapacity,
                 ]);
-                $festivalBuses = collect([$bus]);
-            } else {
-                $bus = $festivalBuses->last();
+                $festivalBuses->push($bus);
+                $busNumber++;
+                $freeSeats = $busCapacity;
             }
-            $bookedSeats = \App\Models\Booking::where('bus_id', $bus->id)->where('status', 'Bevestigd')->sum('seats');
-            $freeSeats = $bus->capacity - $bookedSeats;
-            if ($freeSeats <= 0) {
-                // Current bus is full, create a new bus
+            $assignSeats = min($seatsToAssign, $freeSeats);
+            $startSeat = $bookedSeats + 1;
+            $seatNumbers = array_merge($seatNumbers, range($startSeat, $startSeat + $assignSeats - 1));
+            $booking = Booking::create([
+                'customer_id' => $request->customer_id,
+                'festival_id' => $request->festival_id,
+                'bus_id' => $bus->id,
+                'seats' => $assignSeats,
+                'total_price' => $assignSeats * ($festival->price ?? 0),
+                'points_awarded' => (int)(($assignSeats * ($festival->price ?? 0)) / 10),
+                'status' => 'Bevestigd',
+                'booked_at' => now(),
+                'seat_numbers' => implode(',', range($startSeat, $startSeat + $assignSeats - 1)),
+                'seat_type' => $request->seat_type,
+            ]);
+            $seatsToAssign -= $assignSeats;
+        }
+
+        // Bus assignment logic: capacity 50-150 (intervals of 25), bus #1, #2, etc.
+        $festivalBuses = \App\Models\Bus::where('festival_id', $festival->id)->orderBy('id')->get();
+        $seatsToAssign = $seats;
+        $busNumber = $festivalBuses->count() + 1;
+        while ($seatsToAssign > 0) {
+            $bus = $festivalBuses->last();
+            $busCapacity = $bus ? $bus->capacity : null;
+            $bookedSeats = $bus ? \App\Models\Booking::where('bus_id', $bus->id)->where('status', 'Bevestigd')->sum('seats') : 0;
+            $freeSeats = $bus ? ($busCapacity - $bookedSeats) : 0;
+            if (!$bus || $freeSeats <= 0) {
+                // Always random bus capacity between 50 and 150 (intervals of 25)
                 $possibleSizes = range(50, 150, 25);
                 $busCapacity = $possibleSizes[array_rand($possibleSizes)];
-                $busNumber = $festivalBuses->count() + 1;
                 $bus = \App\Models\Bus::create([
                     'festival_id' => $festival->id,
                     'name' => $festival->name . ' Bus #' . $busNumber,
                     'capacity' => $busCapacity,
                 ]);
                 $festivalBuses->push($bus);
+                $busNumber++;
                 $freeSeats = $busCapacity;
             }
             $assignSeats = min($seatsToAssign, $freeSeats);
@@ -101,14 +128,13 @@ class BookingController extends Controller
             $booking->save();
             $seatsToAssign -= $assignSeats;
             if ($seatsToAssign > 0) {
-                // If there are more seats to assign, create a new booking for the remaining seats
                 $booking = Booking::create([
                     'customer_id' => $request->customer_id,
                     'festival_id' => $request->festival_id,
                     'seats' => $seatsToAssign,
                     'total_price' => $seatsToAssign * ($festival->price ?? 0),
                     'points_awarded' => (int)(($seatsToAssign * ($festival->price ?? 0)) / 10),
-                    'status' => 'Bevestigd',
+                    'status' => 'Betaald',
                     'booked_at' => now(),
                 ]);
             }

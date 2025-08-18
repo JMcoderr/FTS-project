@@ -15,6 +15,8 @@ return new class extends Migration
             $table->unsignedBigInteger('bus_id')->nullable();
             $table->unsignedInteger('seats')->default(1);
             $table->string('status')->default('pending');
+            $table->string('seat_numbers')->nullable();
+            $table->string('seat_type')->nullable();
             $table->decimal('total_price', 10, 2)->nullable();
             $table->timestamp('booked_at')->useCurrent();
             $table->unsignedInteger('points_awarded')->default(0);

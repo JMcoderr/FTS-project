@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<h2>Alle Festivals</h2>
+<h2>Festival List</h2>
 @if(session('success'))
     <div style="color: green;">{{ session('success') }}</div>
 @endif
@@ -16,5 +16,5 @@
     </li>
 @endforeach
 </ul>
-<a href="/dashboard">Terug naar dashboard</a>
+<a href="/dashboard">Terug naar admin dashboard</a>
 @endsection

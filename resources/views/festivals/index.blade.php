@@ -4,8 +4,9 @@
 <body class="festival-bg">
     <div class="festival-container">
         <div class="festival-accent"></div>
-        <h1 class="festival-header">Festivals</h1>
-        <a href="{{ route('festivals.create') }}" class="festival-btn">Nieuw Festival Toevoegen</a>
+    <h1 class="festival-header">Festivals</h1>
+    <a href="/dashboard" class="festival-btn" style="margin-bottom: 10px;">Terug naar admin dashboard</a>
+    <a href="{{ route('festivals.create') }}" class="festival-btn">Nieuw Festival Toevoegen</a>
         @if(session('success'))
             <p style="color: green;">{{ session('success') }}</p>
         @endif

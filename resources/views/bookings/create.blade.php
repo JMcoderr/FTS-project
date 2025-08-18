@@ -39,6 +39,14 @@
     <label>Tickets:</label><br>
     <input type="number" name="seats" min="1" value="{{ old('seats', 1) }}" required><br><br>
 
+    <label>Stoeltype:</label><br>
+    <select name="seat_type" required>
+        <option value="">-- kies stoeltype --</option>
+        <option value="standaard" {{ old('seat_type')=='standaard'?'selected':'' }}>Standaard</option>
+        <option value="comfort" {{ old('seat_type')=='comfort'?'selected':'' }}>Comfort</option>
+        <option value="luxury" {{ old('seat_type')=='luxury'?'selected':'' }}>Luxury</option>
+    </select><br><br>
+
     <label>Status:</label><br>
     <select name="status" required>
         <option value="Bevestigd" {{ old('status','Bevestigd')=='Bevestigd'?'selected':'' }}>Bevestigd</option>

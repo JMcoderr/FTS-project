@@ -10,9 +10,14 @@
 
 <p><strong>Klant:</strong> {{ $booking->customer?->first_name }} {{ $booking->customer?->last_name }} ({{ $booking->customer?->email }})</p>
 <p><strong>Festival:</strong> {{ $booking->festival?->name }} — {{ $booking->festival?->date }} — {{ $booking->festival?->location }}</p>
-<p><strong>Tickets:</strong> {{ $booking->seats }}</p>
-<p><strong>Status:</strong> {{ $booking->status }}</p>
-<p><strong>Totaal aantal tickets:</strong> {{ $booking->seats }}</p>
+<p><strong>Stoeltype:</strong> {{ ucfirst($booking->seat_type) ?? '-' }}</p>
+<p><strong>Stoelnummers:</strong> {{ $booking->seat_numbers ?? '-' }}</p>
+@if($booking->bus)
+    <p><strong>Bus:</strong> Bus ({{ $booking->bus->id }})</p>
+@else
+    <p><strong>Bus:</strong> -</p>
+@endif
+<p><strong>Status:</strong> {{ ucfirst($booking->status) }}</p>
 <p><strong>Totaal prijs (€):</strong> {{ number_format($booking->total_price, 2) }}</p>
 <p><strong>Punten toegekend:</strong> {{ $booking->points_awarded }}</p>
 <p><strong>Geboekt op:</strong> {{ $booking->booked_at?->format('Y-m-d H:i') }}</p>

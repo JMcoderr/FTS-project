@@ -5,6 +5,7 @@
 <body class="customer-bg">
     <div class="customer-container">
         <div class="customer-accent"></div>
+        <a href="/dashboard" class="customer-btn" style="margin-bottom: 10px;">Terug naar admin dashboard</a>
         <a href="{{ route('customers.create') }}" class="customer-btn">Nieuwe klant toevoegen</a>
         <h1 class="customer-header">Klantenlijst</h1>
         <table class="customer-table">
