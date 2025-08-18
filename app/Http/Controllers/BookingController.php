@@ -45,7 +45,17 @@ class BookingController extends Controller
             'customer_id' => 'required|exists:customers,id',
             'festival_id' => 'required|exists:festivals,id',
             'seats' => 'required|integer|min:1',
+            'seat_type' => 'required',
         ]);
+
+        // Check for duplicate booking
+        $existingBooking = \App\Models\Booking::where('customer_id', $request->customer_id)
+            ->where('festival_id', $request->festival_id)
+            ->where('status', 'Bevestigd')
+            ->first();
+        if ($existingBooking) {
+            return back()->withErrors(['Je hebt al een boeking voor dit festival.']);
+        }
 
         $festival = \App\Models\Festival::findOrFail($request->festival_id);
         $seats = (int)$request->seats;
@@ -123,6 +133,9 @@ class BookingController extends Controller
                 $freeSeats = $busCapacity;
             }
             $assignSeats = min($seatsToAssign, $freeSeats);
+            if ($assignSeats > $freeSeats) {
+                return back()->withErrors(['Niet genoeg vrije stoelen in de bus.']);
+            }
             $booking->bus_id = $bus->id;
             $booking->seats = $assignSeats;
             $booking->save();

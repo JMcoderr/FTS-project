@@ -4,6 +4,7 @@
 <h1>Boekingen</h1>
 
 <a href="{{ route('bookings.create') }}">Nieuwe Boeking</a>
+<a href="/dashboard" class="btn btn-secondary" style="margin-bottom: 10px;">Terug naar admin dashboard</a>
 
 @if(session('success'))
     <p style="color: green;">{{ session('success') }}</p>
@@ -13,9 +14,8 @@
     <label>Status:</label>
     <select name="status">
         <option value="">-- alle --</option>
-        @foreach(['pending','confirmed','cancelled'] as $st)
-            <option value="{{ $st }}" {{ request('status')===$st?'selected':'' }}>{{ ucfirst($st) }}</option>
-        @endforeach
+        <option value="Bevestigd" {{ request('status')==='Bevestigd'?'selected':'' }}>Bevestigd</option>
+        <option value="Geannuleerd" {{ request('status')==='Geannuleerd'?'selected':'' }}>Geannuleerd</option>
     </select>
     <button type="submit">Filter</button>
 </form>
@@ -38,34 +38,36 @@
     </thead>
     <tbody>
         @forelse($bookings as $b)
-        <tr>
-            <td>{{ $b->id }}</td>
-            <td>{{ $b->customer?->first_name }} {{ $b->customer?->last_name }}</td>
-            <td>{{ $b->festival?->name }}</td>
-            <td>{{ ucfirst($b->seat_type) ?? '-' }}</td>
-            <td>{{ $b->seat_numbers ?? '-' }}</td>
-            <td>
-                @if($b->bus)
-                    Bus {{ $b->bus->id }}
-                @else
-                    -
-                @endif
-            </td>
-            <td>{{ ucfirst($b->status) }}</td>
-            <td>{{ number_format($b->total_price, 2) }}</td>
-            <td>{{ $b->points_awarded }}</td>
-            <td>{{ $b->created_at ? $b->created_at->format('Y-m-d H:i') : '-' }}</td>
-            <td>
-                <a href="{{ route('bookings.show', $b) }}">Bekijk</a> |
-                <a href="{{ route('bookings.edit', $b) }}">Bewerken</a> |
-                <form action="{{ route('bookings.destroy', $b) }}" method="POST" style="display:inline;">
-                    @csrf @method('DELETE')
-                    <button type="submit" onclick="return confirm('Verwijderen?')">Verwijderen</button>
-                </form>
-            </td>
-        </tr>
+            @if((!request('status')) || (request('status')==='Bevestigd' && strtolower($b->status)=='bevestigd') || (request('status')==='Geannuleerd' && strtolower($b->status)=='geannuleerd'))
+            <tr>
+                <td>{{ $b->id }}</td>
+                <td>{{ $b->customer?->first_name }} {{ $b->customer?->last_name }}</td>
+                <td>{{ $b->festival?->name }}</td>
+                <td>{{ ucfirst($b->seat_type) ?? '-' }}</td>
+                <td>{{ $b->seat_numbers ?? '-' }}</td>
+                <td>
+                    @if($b->bus)
+                        Bus {{ $b->bus->id }}
+                    @else
+                        -
+                    @endif
+                </td>
+                <td>{{ ucfirst($b->status) }}</td>
+                <td>{{ number_format($b->total_price, 2) }}</td>
+                <td>{{ $b->points_awarded }}</td>
+                <td>{{ $b->created_at ? $b->created_at->format('Y-m-d H:i') : '-' }}</td>
+                <td>
+                    <a href="{{ route('bookings.show', $b) }}">Bekijk</a> |
+                    <a href="{{ route('bookings.edit', $b) }}">Bewerken</a> |
+                    <form action="{{ route('bookings.destroy', $b) }}" method="POST" style="display:inline;">
+                        @csrf @method('DELETE')
+                        <button type="submit" onclick="return confirm('Verwijderen?')">Verwijderen</button>
+                    </form>
+                </td>
+            </tr>
+            @endif
         @empty
-        <tr><td colspan="11">Geen boekingen gevonden.</td></tr>
+            <tr><td colspan="11">Geen boekingen gevonden.</td></tr>
         @endforelse
     </tbody>
 </table>

@@ -14,27 +14,9 @@
         <form method="GET" action="{{ route('festivals.index') }}" class="festival-form" style="margin-bottom: 18px;">
             <label for="search">Zoek op naam of locatie</label>
             <input type="text" id="search" name="search" placeholder="Zoek op naam of locatie" value="{{ request('search') }}">
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <div>
-                    <label for="sort">Sorteren op</label>
-                    <select id="sort" name="sort">
-                        <option value="id" {{ request('sort') == 'id' ? 'selected' : '' }}>ID</option>
-                        <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Naam</option>
-                        <option value="date" {{ request('sort') == 'date' ? 'selected' : '' }}>Datum</option>
-                        <option value="location" {{ request('sort') == 'location' ? 'selected' : '' }}>Locatie</option>
-                        <option value="price" {{ request('sort') == 'price' ? 'selected' : '' }}>Prijs</option>
-                        <option value="max_capacity" {{ request('sort') == 'max_capacity' ? 'selected' : '' }}>Max. Capaciteit</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="direction">Richting</label>
-                    <select id="direction" name="direction">
-                        <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>Oplopend</option>
-                        <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Aflopend</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="festival-btn">Filter</button>
+            <label for="min_bookings">Minimaal aantal boekingen</label>
+            <input type="number" id="min_bookings" name="min_bookings" value="{{ request('min_bookings') }}" min="0">
+            <button type="submit">Zoeken/Filteren</button>
         </form>
         <table class="festival-table">
             <thead>
@@ -78,6 +60,29 @@
         </table>
         <div class="pagination-wrapper" style="margin-top: 24px; text-align: center;">
             {{ $festivals->links() }}
+        </div>
+        @php
+            $festivalBookings = [];
+            foreach($festivals as $festival) {
+                $festivalBookings[$festival->id] = \App\Models\Booking::where('festival_id', $festival->id)->count();
+            }
+        @endphp
+        <div style="margin: 20px 0;">
+            <h3>Aantal boekingen per festival</h3>
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>Festival</th>
+                    <th>Aantal boekingen</th>
+                </tr>
+                @foreach($festivals as $festival)
+                    @if((!request('min_bookings') || $festivalBookings[$festival->id] >= request('min_bookings')) && (!request('search') || str_contains(strtolower($festival->name . $festival->location), strtolower(request('search')))))
+                    <tr>
+                        <td>{{ $festival->name }}</td>
+                        <td>{{ $festivalBookings[$festival->id] }}</td>
+                    </tr>
+                    @endif
+                @endforeach
+            </table>
         </div>
     </div>
 </body>
