@@ -257,3 +257,9 @@ Route::resource('bookings', BookingController::class);
 Route::resource('buses', BusController::class);
 
 Route::get('/about', fn() => view('about'));
+Route::get('/support', function () {
+    return view('support');
+});
+Route::get('/contact', function () {
+    return view('support');
+});
