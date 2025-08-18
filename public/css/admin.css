@@ -237,7 +237,6 @@ body {
     letter-spacing: 1px;
     text-align: center;
 }
-    transition: color 0.2s;
 
 .admin-table tr {
     border-bottom: 1px solid #f1f5f9;
